@@ -7,13 +7,19 @@
 EBTNodeResult::Type UChooseNextWayPoint::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	//Getting Patrol Routes
-	AAIController* AIController = OwnerComp.GetAIOwner();
-	APawn* ControlledPawn = AIController->GetPawn();
-	APatrollingGuard* PatrollingGuard = Cast<APatrollingGuard>(ControlledPawn);
-	TArray<AActor*> PatrollingPoints = PatrollingGuard->PatrolPointsCpp;
-	if (PatrollingPoints[0] == nullptr)
-		return EBTNodeResult::Succeeded;
+	APawn* ControlledPawn = OwnerComp.GetAIOwner()->GetPawn();
+	UPatrolRoute* PatrolRoute = ControlledPawn->FindComponentByClass<UPatrolRoute>();
 
+	if (!PatrolRoute)  //If PatrolPoint Component Doesnt Exist
+		return EBTNodeResult::Failed;
+
+
+	TArray<AActor*> PatrollingPoints = PatrolRoute->GetPatrolPoints();
+	if (PatrollingPoints.Num() == 0)  //If No Patrol Points Are Assigned
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Guard Missing Patrol Points"));
+		return EBTNodeResult::Failed;
+	}
 	//Set Way Point
 	UBlackboardComponent* BlackboardComp = OwnerComp.GetBlackboardComponent();
 	int Index = BlackboardComp->GetValueAsInt(IndexKey.SelectedKeyName);

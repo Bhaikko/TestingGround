@@ -16,8 +16,7 @@ class TESTINGGROUND_UE4_API APatrollingGuard : public ATP_ThirdPersonCharacter
 		
 public:
 	UPROPERTY(EditInstanceOnly, Category = "Patrol Route")
-	TArray<AActor*> PatrolPointsCpp;
-	
+		TArray<AActor*> PatrolPointsCpp;
 
 	
 };

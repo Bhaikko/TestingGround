@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTTaskNode.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "AIController.h"
+#include "PatrollingGuard.h"
 #include "ChooseNextWayPoint.generated.h"
 
 /**
@@ -17,9 +19,14 @@ class TESTINGGROUND_UE4_API UChooseNextWayPoint : public UBTTaskNode
 
 private:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
-
+	
 protected:
 	UPROPERTY(EditAnywhere, Category = "Blackboard Data")
 		struct FBlackboardKeySelector IndexKey;
+	UPROPERTY(EditAnywhere, Category = "Blackboard Data")
+		struct FBlackboardKeySelector WayPointKey;
+
+
+
 
 };

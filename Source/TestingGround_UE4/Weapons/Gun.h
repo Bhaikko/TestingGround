@@ -50,6 +50,7 @@ public:
 		class UAnimInstance* AnimInstance;
 
 	/** Fires a projectile. */
-	void OnFire();
+	UFUNCTION(BlueprintCallable, Category = "Firing")
+		void OnFire();
 	
 };

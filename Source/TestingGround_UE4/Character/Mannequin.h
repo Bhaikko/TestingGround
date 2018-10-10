@@ -11,6 +11,15 @@ class TESTINGGROUND_UE4_API AMannequin : public ACharacter
 {
 	GENERATED_BODY()
 
+
+private:
+	UPROPERTY(VisibleDefaultsOnly, Category = "Mesh")
+		class USkeletalMeshComponent* Mesh1P;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+		class UCameraComponent* FirstPersonCameraComponent;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+		class AGun* Gun;
+
 public:
 	// Sets default values for this character's properties
 	AMannequin();
@@ -25,6 +34,12 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+		TSubclassOf<AGun> GunBlueprint;
+
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+		void Fire();
 
 	
 	

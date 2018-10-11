@@ -43,11 +43,16 @@ public:
 
 	/** AnimMontage to play each time we fire */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-		class UAnimMontage* FireAnimation;
+		class UAnimMontage* FireAnimationFP;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+		class UAnimMontage* FireAnimationTP;
 
 	/** Get the animation object for the arms mesh **/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-		class UAnimInstance* AnimInstance;
+		class UAnimInstance* AnimInstanceFP;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+		class UAnimInstance* AnimInstanceTP;
+
 
 	/** Fires a projectile. */
 	UFUNCTION(BlueprintCallable, Category = "Firing")

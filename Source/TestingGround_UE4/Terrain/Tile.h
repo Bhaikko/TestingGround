@@ -24,9 +24,13 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable, Category = "RandomData")
-		void PlaceActors(TSubclassOf<AActor> ToSpawn, int32 MinNum, int32 MaxNum);
+		void PlaceActors(TSubclassOf<AActor> ToSpawn, int32 MinNum = 1, int32 MaxNum = 1, float Radius = 700, float MinScale = 1, float MaxScale = 1);
 
 private:
-	bool SphereCast(FVector Location, float Radius);
+	bool CanSpawnAtLocation(FVector Location, float Radius);
+
+	bool FindEmptyLocation(FVector& SpawnPoint,float Radius);
+
+	void SpawnActor(TSubclassOf<AActor> ToSpawn, FVector SpawnPoint,float Rotation,float Scale);
 	
 };

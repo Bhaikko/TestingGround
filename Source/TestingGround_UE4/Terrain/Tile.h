@@ -32,5 +32,11 @@ private:
 	bool FindEmptyLocation(FVector& SpawnPoint,float Radius);
 
 	void SpawnActor(TSubclassOf<AActor> ToSpawn, FVector SpawnPoint,float Rotation,float Scale);
+
+	class UActorPool* Pool;
+
+public:
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+		void PoolReference(UActorPool* PoolToSet);
 	
 };

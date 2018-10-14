@@ -2,6 +2,7 @@
 
 #include "Tile.h"
 #include "Engine/World.h"
+#include "ActorPool.h"
 #include "DrawDebugHelpers.h"
 
 
@@ -79,4 +80,10 @@ void ATile::SpawnActor(TSubclassOf<AActor> ToSpawn, FVector SpawnPoint,float Rot
 	SpawnedActor->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
 	SpawnedActor->SetActorRelativeRotation(FRotator(0, Rotation, 0));
 	SpawnedActor->SetActorRelativeScale3D(FVector(Scale));
+}
+
+void ATile::PoolReference(UActorPool* PoolToSet)
+{
+	Pool = PoolToSet;
+	//UE_LOG(LogTemp, Warning, TEXT("Done"));
 }

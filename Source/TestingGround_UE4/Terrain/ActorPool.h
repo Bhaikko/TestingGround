@@ -13,16 +13,16 @@ class TESTINGGROUND_UE4_API UActorPool : public UActorComponent
 	
 public:	
 	// Sets default values for this actor's properties
-	UActorPool();
-
-public:	
-	
+	UActorPool();	
 
 	AActor* Checkout();
 
 	void Return(AActor* ActorToReturn);
 
 	void Add(AActor* ActorToAdd);
+
+private:
+	TArray<AActor*> Pool;
 
 	
 	

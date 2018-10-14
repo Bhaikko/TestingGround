@@ -3,6 +3,8 @@
 #include "Tile.h"
 #include "Engine/World.h"
 #include "ActorPool.h"
+#include "Engine/World.h"
+#include "AI/Navigation/NavigationSystem.h"
 #include "DrawDebugHelpers.h"
 
 
@@ -12,12 +14,23 @@ ATile::ATile()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	MinExtend = FVector(0, -2000, 0);
+	MaxExtend = FVector(4000, 2000, 0);
 }
 
 // Called when the game starts or when spawned
 void ATile::BeginPlay()
 {
 	Super::BeginPlay();
+}
+
+void ATile::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+	
+	Pool->Return(NavMeshVolume);
+	
+
 }
 
 // Called every frame
@@ -48,20 +61,14 @@ bool ATile::CanSpawnAtLocation(FVector Location, float Radius)
 	FHitResult Hit;
 	FVector GlobalLocation = ActorToWorld().TransformPosition(Location);
 	bool HitResult = GetWorld()->SweepSingleByChannel(Hit, GlobalLocation, GlobalLocation, FQuat::Identity, ECollisionChannel::ECC_GameTraceChannel2, FCollisionShape::MakeSphere(Radius));
-
-	//FColor ColorResult = HitResult ? FColor::Red : FColor::Green;
-	//DrawDebugCapsule(GetWorld(), GlobalLocation, 0, Radius,FQuat::Identity, ColorResult, true, 100);
-
-
 	return !HitResult;
 
 }
 
 bool ATile::FindEmptyLocation(FVector& SpawnPoint,float Radius)
 {
-	FVector Min(0, -2000, 0);
-	FVector Max(4000, 2000, 0);
-	FBox Bounds(Min, Max);
+
+	FBox Bounds(MinExtend, MaxExtend);
 	int32 MaxAttempts = 5;
 	for (int i = 1; i <= MaxAttempts; i++)
 	{
@@ -85,5 +92,23 @@ void ATile::SpawnActor(TSubclassOf<AActor> ToSpawn, FVector SpawnPoint,float Rot
 void ATile::PoolReference(UActorPool* PoolToSet)
 {
 	Pool = PoolToSet;
-	//UE_LOG(LogTemp, Warning, TEXT("Done"));
+	
+	PositionNavmeshVolume();
+}
+
+void ATile::PositionNavmeshVolume()
+{
+	
+	NavMeshVolume = Pool->Checkout();
+	if (NavMeshVolume == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Navmesh Null"));
+		return;
+	}
+	NavMeshVolume->SetActorLocation(GetActorLocation());
+
+	UNavigationSystem::GetNavigationSystem(GetWorld())->Build();
+	UE_LOG(LogTemp, Warning, TEXT("Repositioned"));
+	
+
 }

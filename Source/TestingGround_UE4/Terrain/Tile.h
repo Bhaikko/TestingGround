@@ -19,12 +19,16 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable, Category = "RandomData")
 		void PlaceActors(TSubclassOf<AActor> ToSpawn, int32 MinNum = 1, int32 MaxNum = 1, float Radius = 700, float MinScale = 1, float MaxScale = 1);
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+		void PoolReference(UActorPool* PoolToSet);
 
 private:
 	bool CanSpawnAtLocation(FVector Location, float Radius);
@@ -35,8 +39,16 @@ private:
 
 	class UActorPool* Pool;
 
-public:
-	UFUNCTION(BlueprintCallable, Category = "Setup")
-		void PoolReference(UActorPool* PoolToSet);
+	AActor* NavMeshVolume;
+
+	void PositionNavmeshVolume();
+
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Spawning")
+		FVector MaxExtend;
+	UPROPERTY(EditDefaultsOnly, Category = "Spawning")
+		FVector MinExtend;
+
+	
 	
 };

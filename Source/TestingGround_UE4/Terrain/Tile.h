@@ -40,6 +40,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "RandomData")
 		void PlaceActors(TSubclassOf<AActor> ToSpawn, int32 MinNum = 1, int32 MaxNum = 1, float Radius = 700, float MinScale = 1, float MaxScale = 1);
+	UFUNCTION(BlueprintCallable, Category = "RandomData")
+		void PlaceAIPawns(TSubclassOf<class APawn> ToSpawn, int32 MinNum = 1, int32 MaxNum = 1, float Radius = 700);
+
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 		void PoolReference(UActorPool* PoolToSet);
 
@@ -51,6 +54,8 @@ private:
 	TArray<FSpawnPosition> RandomSpawnPoints(int32 MinNum, int32 MaxNum, float Radius, float MinScale, float MaxScale);
 
 	void SpawnActor(TSubclassOf<AActor> ToSpawn,const FSpawnPosition& SpawnPosition);
+
+	void SpawnAIPawns(TSubclassOf<AActor> ToSpawn, const FSpawnPosition& SpawnPosition);
 
 	class UActorPool* Pool;
 

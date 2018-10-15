@@ -5,6 +5,7 @@
 #include "ActorPool.h"
 #include "Engine/World.h"
 #include "AI/Navigation/NavigationSystem.h"
+#include "GameFramework/Pawn.h"
 #include "DrawDebugHelpers.h"
 
 
@@ -101,6 +102,27 @@ void ATile::SpawnActor(TSubclassOf<AActor> ToSpawn, const FSpawnPosition& SpawnP
 	SpawnedActor->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
 	SpawnedActor->SetActorRelativeRotation(FRotator(0, SpawnPosition.Rotation, 0));
 	SpawnedActor->SetActorRelativeScale3D(FVector(SpawnPosition.Scale));
+}
+void ATile::PlaceAIPawns(TSubclassOf<APawn> ToSpawn, int32 MinNum, int32 MaxNum, float Radius)
+{
+	TArray<FSpawnPosition> SpawnPositions = RandomSpawnPoints(MinNum, MaxNum, Radius, 1, 1);
+
+	for (FSpawnPosition Position : SpawnPositions)
+	{
+		SpawnAIPawns(ToSpawn, Position);
+	}
+	
+
+}
+
+void ATile::SpawnAIPawns(TSubclassOf<AActor> ToSpawn, const FSpawnPosition& SpawnPosition)
+{
+	APawn* SpawnedAI = GetWorld()->SpawnActor<APawn>(ToSpawn);
+	SpawnedAI->SetActorRelativeLocation(SpawnPosition.Location);
+	SpawnedAI->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
+	SpawnedAI->SetActorRelativeRotation(FRotator(0, SpawnPosition.Rotation, 0));
+	SpawnedAI->SpawnDefaultController();
+	SpawnedAI->Tags.Add(FName("Enemy"));
 }
 
 void ATile::PoolReference(UActorPool* PoolToSet)
